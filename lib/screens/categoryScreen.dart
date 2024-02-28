@@ -13,11 +13,12 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryRead extends State<CategoryScreen>{
 
+  bool check = false;
+
   @override //빌드와 함께 카테고리 정보를 불러오기 위함.
   void initState(){
-    _Category(context);
-    print(decodedCategoryList);
     super.initState();
+    _Category(context);
   }
 
   var decodedCategoryList = [];
@@ -47,33 +48,45 @@ class _CategoryRead extends State<CategoryScreen>{
      // final categoryList = prefs.getString('categoryList'); // 내부 저장소에서 조회( 사용시 decode 필수 )
 
       print('saved categoryList: $decodedCategoryList');
+
+      setState(() {
+        check = true;
+      });
     }
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListView.builder(
-            itemCount: decodedCategoryList.length,
-            itemBuilder: (context, index){
-              return  Card(
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _Category(context);
-                      },
-                      child: SizedBox(
-                          width: 300,
-                          height: 100,
-                          child: Text(decodedCategoryList[index]["name"].toString())
-                      )
-                  )
-              );
-            }
-        )
-    );
+    if(check){
+      return Scaffold(
+          body: GridView.builder(
+              itemCount: decodedCategoryList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemBuilder: (context, index){
+                return  Card(
+                    clipBehavior: Clip.hardEdge,
+                    child: InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () {
+                          _Category(context);
+                        },
+                        child: SizedBox(
+                            width: 300,
+                            height: 100,
+                            child: Text(decodedCategoryList[index]["name"].toString())
+                        )
+                    )
+                );
+              },
+          )
+      );
+    }else{
+      return Container();
+    }
+
   }
 }
 
