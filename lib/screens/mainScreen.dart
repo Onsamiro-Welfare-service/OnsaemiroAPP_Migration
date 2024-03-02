@@ -25,6 +25,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(
     fontSize: 30,
@@ -34,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     CategoryScreen(),
     RequestScreen(),
-    CommunityScreen(),
+    //CommunityScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -59,25 +64,15 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(Icons.announcement),
               label: '도움 요청'
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.group),
-              label: '커뮤니티'
-          )
+          //BottomNavigationBarItem(
+              //icon: Icon(Icons.group),
+              //label: '커뮤니티'
+          //)
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.cyan,
         onTap: _onItemTapped,
     ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

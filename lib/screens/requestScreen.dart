@@ -44,9 +44,6 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
       if(_image == null) {
           request.files.add(await http.MultipartFile.fromBytes('images', List<int>.empty(), filename: 'empty_file'));
       }else{
-        print(_image!.path);
-        print(textData);
-        print(userID);
         request.files.add(await http.MultipartFile.fromPath('images', _image!.path));
       }
 
