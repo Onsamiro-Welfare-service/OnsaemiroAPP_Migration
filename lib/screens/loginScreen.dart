@@ -34,22 +34,22 @@ class _LoginPageState extends State<LoginPage> {
 
       final prefs = await SharedPreferences.getInstance();
 
-      prefs.setInt('Id', tempTk['data']['id']);
-      prefs.setInt('Lvl', tempTk['data']['level']);
-      prefs.setString('AccessTk', tempTk['data']['accessToken']);
-      prefs.setString('RefreshTk', tempTk['data']['refreshToken']);
+      prefs.setInt('userId', tempTk['data']['id']);
+      prefs.setInt('level', tempTk['data']['level']);
+      prefs.setString('accessToken', tempTk['data']['accessToken']);
+      prefs.setString('refreshToken', tempTk['data']['refreshToken']);
 
-      final i = prefs.getInt('Id');
-      final l = prefs.getInt('Lvl');
-      final a = prefs.getString('AccessTk');
-      final b = prefs.getString('RefreshTk');
+      final i = prefs.getInt('userId');
+      final l = prefs.getInt('level');
+      final a = prefs.getString('accessToken');
+      final b = prefs.getString('refreshToken');
 
       print('saved ID: $i');
       print('saved LVL: $l');
       print('saved AT: $a');
       print('saved RT: $b');
 
-      Navigator.pushNamed(context, '/main');
+      Navigator.of(context).pushReplacementNamed('/main');
 
     }
 
