@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../component/refreshToken.dart';
 import '../route.dart';
 
 class RequestScreen extends StatefulWidget {
@@ -41,9 +42,7 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
       var request = http.MultipartRequest('POST', url)
         ..headers['authorization']='Bearer $AccTkn'
         ..fields['request'] = data;
-      if(_image == null) {
-          request.files.add(await http.MultipartFile.fromBytes('images', List<int>.empty(), filename: 'empty_file'));
-      }else{
+      if(_image != null) {
         request.files.add(await http.MultipartFile.fromPath('images', _image!.path));
       }
 
@@ -56,11 +55,40 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
         print('error occured');
       }else if (response.statusCode == 200){
         print('Uploaded');
+      }else if (response.statusCode == 401) {
+        RefreshToken(context, _AddRequest(context));
       }
     }else{
       print("userId: $userID & AccTkn: $AccTkn");
     }
 
+  }
+
+  Future<void> _Alert() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('요구사항 오류'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('사진을 꼭 넣어서 보내주세요.')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_onsaemiro_0/route.dart';
+import '../component/refreshToken.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key:key);
@@ -39,19 +40,23 @@ class _CategoryRead extends State<CategoryScreen>{
 
     if (response.statusCode == 403){
       print('Category Read error');
-    }else if (response.statusCode == 200){
+    }else if (response.statusCode == 200) {
+      var encodedCategoryList = response
+          .body; // String 형식( SharedPreferences가 리스트<dynamic> 타입을 받지 못해서 )
+      decodedCategoryList = jsonDecode(utf8.decode(response
+          .bodyBytes))["categoryList"]; // List<dynamic> 형식 => 실제 사용을 위함.
 
-     var encodedCategoryList = response.body; // String 형식( SharedPreferences가 리스트<dynamic> 타입을 받지 못해서 )
-     decodedCategoryList = jsonDecode(utf8.decode(response.bodyBytes))["categoryList"]; // List<dynamic> 형식 => 실제 사용을 위함.
-
-     prefs.setString('categoryList', encodedCategoryList); //내부 저장소에 저장( json형태로 저장 )
-     // final categoryList = prefs.getString('categoryList'); // 내부 저장소에서 조회( 사용시 decode 필수 )
+      prefs.setString(
+          'categoryList', encodedCategoryList); //내부 저장소에 저장( json형태로 저장 )
+      // final categoryList = prefs.getString('categoryList'); // 내부 저장소에서 조회( 사용시 decode 필수 )
 
       print('saved categoryList: $decodedCategoryList');
 
       setState(() {
         check = true;
       });
+    }else if (response.statusCode == 401) {
+      RefreshToken(context, _Category(context));
     }
 
   }
@@ -80,6 +85,8 @@ class _CategoryRead extends State<CategoryScreen>{
       await prefs.setInt("surveyCount", 0); // 현재 질문 순서 저장
 
       Navigator.of(context).pushNamed("/survey");
+    }else if (response.statusCode == 401) {
+      RefreshToken(context, _GetQuestions(id));
     }
     else{
      print(response.statusCode);

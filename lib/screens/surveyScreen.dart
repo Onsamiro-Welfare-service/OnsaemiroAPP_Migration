@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_tts/flutter_tts.dart';
+import '../component/refreshToken.dart';
 import '../route.dart';
 
 class SurveyScreen extends StatefulWidget {
@@ -100,7 +101,10 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
         for(int i=0; i <= count; i++){
           _submit(userAnswer?[i]);
         }
-        Navigator.of(context).pushNamedAndRemoveUntil("/main", ModalRoute.withName("/survey"));
+        if(context.mounted){
+          Navigator.popUntil(context, ModalRoute.withName('/main'));
+        }
+
       }
       else{
       }
@@ -142,11 +146,36 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
 
     if (response.statusCode == 200) {
       print("uploaded Success");
+    }else if (response.statusCode == 401) {
+      RefreshToken(context, _submit(answer));
     }
     else {
       print("error occured - code: ${response.statusCode}");
       print(response.body);
     }
+  }
+
+  //TTS 세팅
+  FlutterTts tts = FlutterTts();
+
+  String language = "ko-KR";
+  Map<String, String> voice = {"name": "ko-kr-x-ism-local", "locale": "ko-KR"};
+  String engine = "com.google.android.tts";
+  double volume = 0.8;
+  double pitch = 1.0;
+  double rate = 0.5;
+
+  initTts() async{
+    tts.setLanguage(language);
+    tts.setVoice(voice);
+    tts.setEngine(engine);
+    tts.setVolume(volume);
+    tts.setPitch(pitch);
+    tts.setSpeechRate(rate);
+  }
+
+  Future<void> _speach(text) async{
+    tts.speak(text);
   }
 
     @override
@@ -162,7 +191,7 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
                       child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
                           onTap: () {
-                            //질문 tts
+                            _speach(surveyData["question"]);
                           },
                           child: Column(
                               children: <Widget>[

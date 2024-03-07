@@ -6,6 +6,11 @@ class Routes {
   /// <= 사용자 id, 중증도, Access&Refresh 토큰
   static const String login = '$_baseUrl/member/auth/login/user';
 
+  /// 토큰 리프레시 api (POST)
+  /// => 사용자 리프레시 토큰
+  /// <= 새로운 Access & Refresh 토큰
+  static const String refresh = '$_baseUrl/member/auth/newtoken';
+
   /// 카테고리 조회 api (GET)
   /// =>
   /// <= 개수(count), 카테고리 정보(data)
