@@ -19,10 +19,8 @@ Future<void> RefreshToken(BuildContext context, Future future) async {
 
   if (response.statusCode == 200){
     Map<String, dynamic> tempTk = jsonDecode(response.body);
-
     prefs.setString("accessToken", tempTk['data']['accessToken']);
     prefs.setString("refreshToken", tempTk['data']['refreshToken']);
-
     return future;
   }
   else{

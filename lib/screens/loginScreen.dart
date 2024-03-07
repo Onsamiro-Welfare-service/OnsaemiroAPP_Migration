@@ -55,29 +55,29 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('로그인'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  usercode = value;
-                });
-              },
-              decoration: InputDecoration(labelText: '로그인 코드'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _login(context),
-              child: Text('로그인'),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset("assets/logo.png"),
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    usercode = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: '로그인 코드'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _login(context),
+                child: Text('로그인'),
+              ),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 }
