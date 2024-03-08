@@ -15,15 +15,12 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryRead extends State<CategoryScreen>{
 
   bool check = false;
-
+  var decodedCategoryList = [];
   @override //빌드와 함께 카테고리 정보를 불러오기 위함.
   void initState(){
     super.initState();
     _Category(context);
   }
-
-  var decodedCategoryList = [];
-
   Future<void> _Category(BuildContext context) async {
 
     final prefs = await SharedPreferences.getInstance(); // SharedPreferences 인스턴스 세팅
@@ -35,11 +32,14 @@ class _CategoryRead extends State<CategoryScreen>{
         'Authorization': 'Bearer ${accessToken}'},
     );
 
-    print('Response status: ${response.statusCode}'); // 요청에 대한 응답상태를 불러오기 위함
+    print('Response status(Category): ${response.statusCode}'); // 요청에 대한 응답상태를 불러오기 위함
     print('Response body: ${response.body}'); // 받아온 요청 값
 
     if (response.statusCode == 403){
       print('Category Read error');
+    }else if (response.statusCode == 401) {
+      print("Category token refresh");
+      RefreshToken(context, _Category(context));
     }else if (response.statusCode == 200) {
       var encodedCategoryList = response
           .body; // String 형식( SharedPreferences가 리스트<dynamic> 타입을 받지 못해서 )
@@ -55,8 +55,6 @@ class _CategoryRead extends State<CategoryScreen>{
       setState(() {
         check = true;
       });
-    }else if (response.statusCode == 401) {
-      RefreshToken(context, _Category(context));
     }
 
   }

@@ -55,6 +55,7 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
         print('error occured');
       }else if (response.statusCode == 200){
         print('Uploaded');
+        _Success();
       }else if (response.statusCode == 401) {
         RefreshToken(context, _AddRequest(context));
       }
@@ -64,17 +65,17 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
 
   }
 
-  Future<void> _Alert() async {
+  Future<void> _Success() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('요구사항 오류'),
+          title: const Text('전송 성공'),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('사진을 꼭 넣어서 보내주세요.')
+                Text('도움 요청 전송이 완료되었습니다.')
               ],
             ),
           ),
