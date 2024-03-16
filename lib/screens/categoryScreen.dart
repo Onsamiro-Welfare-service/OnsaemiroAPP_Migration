@@ -96,7 +96,9 @@ class _CategoryRead extends State<CategoryScreen>{
   Widget build(BuildContext context) {
     if(check){
       return Scaffold(
-          body: GridView.builder(
+          body: Container(
+            color: Color(0xffe4f5f7),
+            child: GridView.builder(
               itemCount: decodedCategoryList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -112,24 +114,25 @@ class _CategoryRead extends State<CategoryScreen>{
                         child: Column(
                             children: <Widget>[
                               Expanded(
-                                flex:3,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Image.network(
-                                    decodedCategoryList[index]["imageUrl"]+"0",
-                                    fit: BoxFit.cover,)
-                                )),
+                                  flex:3,
+                                  child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Image.network(
+                                        decodedCategoryList[index]["imageUrl"]+"0",
+                                        fit: BoxFit.cover,)
+                                  )),
                               Expanded(
-                                flex: 1,
-                                child: Text(
-                                    decodedCategoryList[index]["name"].toString(),
-                                    style: TextStyle(fontSize: 31))
+                                  flex: 1,
+                                  child: Text(
+                                      decodedCategoryList[index]["name"].toString(),
+                                      style: TextStyle(fontSize: 31))
                               )
                             ]
                         )
                     )
                 );
               },
+            ),
           )
       );
     }else{

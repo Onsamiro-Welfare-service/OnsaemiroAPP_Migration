@@ -59,8 +59,11 @@ class _splash extends State<SplashScreen>{
 
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
-      home: Image.asset("assets/logo.png")
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Image.asset("assets/logo.png")
+      )
     );
   }
 }

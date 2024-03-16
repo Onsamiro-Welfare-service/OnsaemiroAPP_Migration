@@ -16,6 +16,7 @@ class SurveyScreen extends StatefulWidget {
 class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출력해주는 클래스
 
   bool check = false;
+  bool lvlCheck = false;
 
   @override //빌드와 함께 카테고리 정보를 불러오기 위함.
   void initState(){
@@ -34,7 +35,14 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
     final surveyEncoded = prefs.getString('surveyData');
     final surveyCount = prefs.getInt('surveyCount');
     final userAnswer = prefs.getStringList('userAnswer');
+    final level = prefs.getInt('level');
     count = surveyCount!; // 현재 질문의 카운트
+
+    if(level == 1){
+      setState(() {
+        lvlCheck = true;
+      });
+    }
 
     if (surveyEncoded != null && userAnswer != null){
       var surveyDecoded = jsonDecode(surveyEncoded);
@@ -182,79 +190,104 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
     Widget build(BuildContext context) {
       if (check) {
         return Scaffold(
-          body: Column(
-            children: <Widget>[
-              Expanded( //질문 카드
-                  flex: 1,
-                  child: Card(
-                      clipBehavior: Clip.hardEdge,
-                      child: InkWell(
-                          splashColor: Colors.blue.withAlpha(30),
-                          onTap: () {
-                            _speach(surveyData["question"]);
-                          },
-                          child: Column(
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 3,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Image.network(
-                                          surveyData["imageUrl"],
-                                          fit: BoxFit.cover,)
-                                    )),
-                                Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                        surveyData["question"].toString(),
-                                        style: TextStyle(fontSize: 31))
-                                )
-                              ]
-                          )
-                      )
-                  )
-              ),
-              Expanded( // 선택지 카드(GridView 형태로 나열)
-                  flex: 1,
-                  child: GridView.builder(
-                      itemCount: answerData.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                      ),
-                      itemBuilder: (Context, index) {
-                        return Card(
-                            clipBehavior: Clip.hardEdge,
-                            child: InkWell(
-                                splashColor: Colors.blue.withAlpha(30),
-                                onTap: () {
-                                  _NextQuestion(answerData[index]["id"]);
-                                },
-                                child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                          flex: 3,
-                                          child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Image.network(
-                                                answerData[index]["imageUrl"],
-                                                //해당 질문지의 선택지
-                                                fit: BoxFit.cover,)
-                                          )),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                              answerData[index]["description"]
-                                                  .toString(),
-                                              style: TextStyle(fontSize: 31))
-                                      )
-                                    ]
+          body: Center(
+            child: Container(
+              color: Color(0xffe4f5f7),
+              child: Column(
+                children: <Widget>[
+                  Expanded( //질문 카드
+                      flex: 1,
+                      child: Row(
+                          children: [
+                            Expanded(
+                                child:
+                                Card(
+                                    clipBehavior: Clip.hardEdge,
+                                    margin: EdgeInsets.only(top:15),
+                                    child: InkWell(
+                                        splashColor: Colors.blue.withAlpha(30),
+                                        onTap: () {
+                                          _speach(surveyData["question"]);
+                                        },
+                                        child: Column(
+                                            children: [
+                                              if(lvlCheck) Expanded(
+                                                  flex: 3,
+                                                  child: Padding(
+                                                      padding: EdgeInsets.all(8.0),
+                                                      child: Image.network(surveyData["imageUrl"],
+                                                          fit: BoxFit.cover
+                                                      )
+                                                  )
+                                              ),
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                          surveyData["question"].toString(),
+                                                          textAlign: TextAlign.center,
+                                                          style: TextStyle(fontSize: 31)),
+                                                    ],
+                                                  )
+                                              )
+                                            ]
+                                        )
+                                    )
                                 )
                             )
-                        );
-                      }
+                          ]
+                      )
+                  ),
+                  Expanded( // 선택지 카드(GridView 형태로 나열)
+                      flex: 1,
+                      child: GridView.builder(
+                          itemCount: answerData.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          itemBuilder: (Context, index) {
+                            return Card(
+                                clipBehavior: Clip.hardEdge,
+                                child: InkWell(
+                                    splashColor: Colors.blue.withAlpha(30),
+                                    onTap: () {
+                                      _NextQuestion(answerData[index]["id"]);
+                                    },
+                                    child: Column(
+                                        children: <Widget>[
+                                          if(lvlCheck) Expanded(
+                                              flex: 3,
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Image.network(
+                                                    answerData[index]["imageUrl"],
+                                                    //해당 질문지의 선택지
+                                                    fit: BoxFit.cover,)
+                                              )),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      answerData[index]["description"].toString(),
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(fontSize: 31))
+                                                ],
+                                              )
+                                          )
+                                        ]
+                                    )
+                                )
+                            );
+                          }
+                      )
                   )
+                ],
               )
-            ],
+            )
           ),
         );
       }

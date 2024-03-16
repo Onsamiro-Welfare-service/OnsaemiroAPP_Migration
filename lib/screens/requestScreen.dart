@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -37,28 +38,33 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
     final AccTkn = prefs.getString('accessToken');
 
     if(userID != null && AccTkn != null){
-      var url = Uri.parse(Routes.sendRequest);
-      var data = jsonEncode({"description": textData, "userId": userID.toString()});
-      var request = http.MultipartRequest('POST', url)
-        ..headers['authorization']='Bearer $AccTkn'
-        ..fields['request'] = data;
-      if(_image != null) {
-        request.files.add(await http.MultipartFile.fromPath('images', _image!.path));
+      final dio = Dio();
+      final data = jsonEncode({"description": textData, "userId": userID});
+
+      dio.options.contentType= "multipart/form-data";
+      dio.options.headers={"authorization" : "Bearer $AccTkn"};
+
+      final formData = FormData.fromMap({ //보낼 데이터
+        "request" : data,
+        "images" : await MultipartFile.fromFile( _image!.path)
+      });
+
+      try{
+        final response = await dio.post(Routes.sendRequest, data:formData);
+        print(response.statusCode);
+        if (response.statusCode == 403){
+          print('error occured');
+        }else if (response.statusCode == 200){
+          print('Uploaded');
+          _Success();
+        }else if (response.statusCode == 401) {
+          RefreshToken(context, _AddRequest(context));
+        }
+      }catch(e){
+        print("error occured in Dio(request) : $e");
       }
 
-      final response = await request.send();
 
-      print('Response status: ${(await http.Response.fromStream(response)).body}');
-      print(request.fields);
-
-      if (response.statusCode == 403){
-        print('error occured');
-      }else if (response.statusCode == 200){
-        print('Uploaded');
-        _Success();
-      }else if (response.statusCode == 401) {
-        RefreshToken(context, _AddRequest(context));
-      }
     }else{
       print("userId: $userID & AccTkn: $AccTkn");
     }
