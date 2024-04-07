@@ -1,5 +1,5 @@
 class Routes {
-  static const String _baseUrl = 'https://test.onsaemiro.site/api';
+  static const String _baseUrl = 'https://onsaemiro.site/api';
 
   /// 로그인 api (POST)
   /// => 사용자 로그인 코드

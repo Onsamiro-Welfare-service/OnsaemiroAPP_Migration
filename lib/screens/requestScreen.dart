@@ -44,26 +44,36 @@ class _SendRequest extends State<RequestScreen> { //요청을 보내는 로직
       dio.options.contentType= "multipart/form-data";
       dio.options.headers={"authorization" : "Bearer $AccTkn"};
 
-      final formData = FormData.fromMap({ //보낼 데이터
-        "request" : data,
-        "images" : await MultipartFile.fromFile( _image!.path)
-      });
-
-      try{
-        final response = await dio.post(Routes.sendRequest, data:formData);
-        print(response.statusCode);
-        if (response.statusCode == 403){
-          print('error occured');
-        }else if (response.statusCode == 200){
-          print('Uploaded');
-          _Success();
-        }else if (response.statusCode == 401) {
-          RefreshToken(context, _AddRequest(context));
+      Future<void> _sendReq(formData) async {
+        print("__send--");
+        try {
+          final response = await dio.post(Routes.sendRequest, data: formData);
+          print(response.statusCode);
+          if (response.statusCode == 403) {
+            print('error occured');
+          } else if (response.statusCode == 200) {
+            print('Uploaded');
+            _Success();
+          } else if (response.statusCode == 401) {
+            RefreshToken(context, _AddRequest(context));
+          }
+        } catch (e) {
+          print("error occured in Dio(request) : $e");
         }
-      }catch(e){
-        print("error occured in Dio(request) : $e");
       }
 
+      if (_image != null){ // 이미지가 없어도 전송가능하게끔 변경
+        final formData = FormData.fromMap({ //보낼 데이터
+          "request" : data,
+          "images" : await MultipartFile.fromFile( _image!.path)
+        });
+        _sendReq(formData);
+      }else {
+        final formData = FormData.fromMap({ //보낼 데이터
+          "request" : data
+        });
+        _sendReq(formData);
+      }
 
     }else{
       print("userId: $userID & AccTkn: $AccTkn");

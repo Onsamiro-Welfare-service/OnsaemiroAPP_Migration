@@ -1,4 +1,4 @@
-package com.example.test_onsaemiro_0;
+package com.onsaemiro;
 
 import io.flutter.embedding.android.FlutterActivity;
 

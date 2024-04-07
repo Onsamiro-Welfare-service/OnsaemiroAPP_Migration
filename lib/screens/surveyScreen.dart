@@ -260,7 +260,7 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
                                           if(lvlCheck) Expanded(
                                               flex: 3,
                                               child: Padding(
-                                                  padding: EdgeInsets.all(8.0),
+                                                  padding: EdgeInsets.all(2.0),
                                                   child: Image.network(
                                                     answerData[index]["imageUrl"],
                                                     //해당 질문지의 선택지
@@ -268,15 +268,20 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
                                               )),
                                           Expanded(
                                               flex: 1,
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                      answerData[index]["description"].toString(),
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(fontSize: 31))
-                                                ],
-                                              )
+                                              child: Padding(
+                                                padding: EdgeInsets.only(bottom: 2),
+                                                  child: FittedBox(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                            answerData[index]["description"].toString(),
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(fontSize: 31))
+                                                      ],
+                                                    )
+                                                  )
+                                              ),
                                           )
                                         ]
                                     )

@@ -31,10 +31,10 @@ class _LoginPageState extends State<LoginPage> {
 
       final prefs = await SharedPreferences.getInstance();
 
-      prefs.setInt('userId', tempTk['data']['id']);
-      prefs.setInt('level', tempTk['data']['level']);
-      prefs.setString('accessToken', tempTk['data']['accessToken']);
-      prefs.setString('refreshToken', tempTk['data']['refreshToken']);
+      prefs.setInt('userId', tempTk['id']);
+      prefs.setInt('level', tempTk['level']);
+      prefs.setString('accessToken', tempTk['accessToken']);
+      prefs.setString('refreshToken', tempTk['refreshToken']);
 
       final i = prefs.getInt('userId');
       final l = prefs.getInt('level');

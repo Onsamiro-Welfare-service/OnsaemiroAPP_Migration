@@ -38,7 +38,15 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+
+#routes
+/lib/route.dart
+
 # Android Studio will place build artifacts here
+/android/app/key.properties
+/android/app/onsaemiroKey.jks
+/android/app/build.gradle
 /android/app/debug
 /android/app/profile
 /android/app/release
+
