@@ -11,14 +11,10 @@ class Routes {
   /// <= 새로운 Access & Refresh 토큰
   static const String refresh = '$_baseUrl/member/auth/newtoken';
 
-  /// 카테고리 조회 api (GET)
-  /// =>
-  /// <= 개수(count), 카테고리 정보(data)
-  static const String getCategory = '$_baseUrl/survey/category/get';
-  /// 카테고리&중증도 질문 조회 api (GET)
-  /// => /{카테고리 id}/level/{중증도} (url에 덧붙이는 방식)
-  /// <= 개수와 질문 정보
-  static const String getsurvey = '$_baseUrl/survey/get/category';
+  /// 사용자에게 할당된 카테고리의 질문 불러오기
+  /// => /{userID}
+  /// <= 갯수와 질문 정보
+  static const String getSurvey = '$_baseUrl/survey/get';
 
   /// 설문 답변 저장 api (POST)
   /// => 설문 id(surveyId), 카테고리 id(categoryId), 답변 id(answerId), 사용자 id(userId)
@@ -30,4 +26,13 @@ class Routes {
   /// <= 성공여부
   static const String sendRequest = '$_baseUrl/request/add';
 
+  /// 방식 변경에 따른 미사용 라우트
+/// 카테고리 조회 api (GET)
+/// =>
+/// <= 개수(count), 카테고리 정보(data)
+static const String getCategory = '$_baseUrl/survey/category/get';
+/// 카테고리&중증도 질문 조회 api (GET)
+/// => /{카테고리 id}/level/{중증도} (url에 덧붙이는 방식)
+/// <= 개수와 질문 정보
+static const String getsurvey = '$_baseUrl/survey/get/category';
 }

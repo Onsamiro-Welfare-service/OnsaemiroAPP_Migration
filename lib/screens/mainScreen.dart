@@ -3,6 +3,7 @@ import 'package:test_onsaemiro_0/screens/categoryScreen.dart';
 import 'package:test_onsaemiro_0/screens/surveyScreen.dart';
 import 'package:test_onsaemiro_0/screens/requestScreen.dart';
 import 'package:test_onsaemiro_0/screens/communityScreen.dart';
+import 'package:test_onsaemiro_0/screens/surveySplashScreen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -37,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
   );
 
   final List<Widget> _widgetOptions = <Widget>[
-    CategoryScreen(),
+    SurveySplashScreen(),
     RequestScreen(),
     //CommunityScreen(),
   ];
