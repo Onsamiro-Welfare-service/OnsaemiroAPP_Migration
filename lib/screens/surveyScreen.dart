@@ -241,54 +241,40 @@ class _Survey extends State<SurveyScreen> { // 질문 정보를 가져와서 출
                       )
                   ),
                   Expanded( // 선택지 카드(GridView 형태로 나열)
-                      flex: 1,
-                      child: GridView.builder(
-                          itemCount: answerData.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                      flex: 3,
+                    child: ListView.builder(
+                      itemCount: answerData?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final description = answerData?[index]["description"]?.toString() ?? '설명이 없습니다';
+                        final id = answerData?[index]["id"];
+
+                        return Card(
+
+                          clipBehavior: Clip.hardEdge,
+                          child: InkWell(
+                            splashColor: Colors.blue.withAlpha(30),
+                            onTap: () {
+                              if (id != null) {
+                                _NextQuestion(id);
+                              }
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0), // 필요한 경우 패딩 조정
+                              child: Column(
+                                children: [
+                                  Text(
+                                    description,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 30), // 필요한 경우 글꼴 크기 조정
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          itemBuilder: (Context, index) {
-                            return Card(
-                                clipBehavior: Clip.hardEdge,
-                                child: InkWell(
-                                    splashColor: Colors.blue.withAlpha(30),
-                                    onTap: () {
-                                      _NextQuestion(answerData[index]["id"]);
-                                    },
-                                    child: Column(
-                                        children: <Widget>[
-                                          if(lvlCheck) Expanded(
-                                              flex: 3,
-                                              child: Padding(
-                                                  padding: EdgeInsets.all(2.0),
-                                                  child: Image.network(
-                                                    answerData[index]["imageUrl"],
-                                                    //해당 질문지의 선택지
-                                                    fit: BoxFit.cover,)
-                                              )),
-                                          Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(bottom: 2),
-                                                  child: FittedBox(
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                            answerData[index]["description"].toString(),
-                                                            textAlign: TextAlign.center,
-                                                            style: TextStyle(fontSize: 31))
-                                                      ],
-                                                    )
-                                                  )
-                                              ),
-                                          )
-                                        ]
-                                    )
-                                )
-                            );
-                          }
-                      )
+                        );
+                      },
+                    ),
+
                   )
                 ],
               )

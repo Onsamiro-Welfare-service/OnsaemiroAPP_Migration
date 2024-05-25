@@ -47,7 +47,12 @@ class _SurveyRead extends State<SurveySplashScreen>{
       await prefs.setInt("surveyNum", surveyNum-1); //질문의 총 갯수-1
       await prefs.setInt("surveyCount", 0); // 현재 질문 순서 저장
 
-      Navigator.of(context).pushNamed("/survey");
+      if(lvl == 1){
+        Navigator.of(context).pushNamed("/surveyWithAAC");
+      }else if(lvl == 2){
+        Navigator.of(context).pushNamed("/survey");
+      }
+
     }else if (response.statusCode == 401) {
       RefreshToken(context, _GetQuestions(context));
     }
